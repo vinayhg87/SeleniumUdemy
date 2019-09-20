@@ -9,7 +9,7 @@ class methodOverLoading(object):
 
     def test1(self, input1=None, input2 = None):
 
-        if input1 is not None and input2 is not None:
+        if (input1 is not None) and (input2 is not None):
             print("from test1(input1, input2) %s" % str(input1))
         else:
             print("from no arg method")
