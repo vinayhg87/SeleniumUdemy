@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 from selenium.webdriver import ActionChains
 from selenium.webdriver.support.ui import Select
 import os
@@ -20,10 +21,17 @@ class FFtest(object):
         # initiating web-driver instance
 
         try:
+            driver.implicitly_wait(10)
             driver.maximize_window()
             driver.get("https://learn.letskodeit.com/p/practice")
             driver.find_element_by_id("bmwradio").click()
+
+            # web-element state
+            print(driver.find_element_by_id("bmwradio").is_displayed())
+            print(driver.find_element_by_id("bmwradio").is_enabled())
+            print(driver.find_element_by_id("bmwradio").is_selected())
             # Radio Button Example
+            driver.find_element(By.ID, "bmwradio").click()  # this will also work but it is just an example.
             # list of radio buttons being fetched in the below command.
             RadioButtonList = driver.find_elements_by_xpath("//fieldset/label/input[@type='radio']")
             for btn in RadioButtonList:
@@ -53,7 +61,22 @@ class FFtest(object):
             for checkbox in checkboxList:
                 checkbox.click()
 
-            # Switch Window
+            # switch tab Example (Same logic as switch-to window)
+            currenttab = driver.window_handles[0]
+            driver.find_element_by_id("opentab").click()
+            time.sleep(1)
+            windowHandles = driver.window_handles
+            for x in range(len(windowHandles)):
+                if currenttab != windowHandles[x]:
+                    driver.switch_to.window(windowHandles[x])
+                    time.sleep(2)
+                    driver.find_element_by_id("search-courses").send_keys("Test2")
+                    time.sleep(2)
+                    driver.close()
+                    driver.switch_to.window(currenttab)
+                    time.sleep(2)
+
+            # Switch Window Example
             baseWindow = driver.window_handles[0]
             driver.find_element_by_id("openwindow").click()
             size = len(driver.window_handles)
@@ -73,9 +96,9 @@ class FFtest(object):
             time.sleep(2)
             driver.find_element_by_css_selector("input[value^='Alert']").click()
             time.sleep(1)
-            Alertprompt = driver.switch_to.alert
-            print("Data fetched from Alert is : "+Alertprompt.text)
-            Alertprompt.accept()
+            AlertPrompt = driver.switch_to.alert
+            print("Data fetched from Alert is : "+AlertPrompt.text)
+            AlertPrompt.accept()
             time.sleep(2)
 
 
