@@ -4,12 +4,15 @@ from selenium.webdriver import ActionChains
 from selenium.webdriver.support.ui import Select
 import os
 import time
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support.wait import WebDriverWait
 
 
 class FFtest(object):
     def testMethod(self):
         # os.getcwd() will fetch the current working directory
         browser = input("Select the browser FF or CH \n")
+        driver = None
         # FireFox browser
         if browser == "FF":
             gekodriverpath = os.getcwd() + "/Drivers/geckodriver.exe"
@@ -91,16 +94,20 @@ class FFtest(object):
                     driver.switch_to.window(baseWindow)
 
             # Switch-to alert Example
-            time.sleep(2)
+            time.sleep(1)
             driver.find_element_by_name("enter-name").send_keys("Hello World")
             time.sleep(2)
             driver.find_element_by_css_selector("input[value^='Alert']").click()
             time.sleep(1)
+            wait = WebDriverWait(driver,10)
+            wait.until(expected_conditions.alert_is_present())
             AlertPrompt = driver.switch_to.alert
             print("Data fetched from Alert is : "+AlertPrompt.text)
             AlertPrompt.accept()
             time.sleep(2)
 
+            # taking screenshots
+            driver.get_screenshot_as_file(os.getcwd()+"/ScreenShots/test1.png")
 
         except Exception as e:
             print("Exception occurred : " + str(e))
