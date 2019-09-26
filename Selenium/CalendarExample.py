@@ -8,37 +8,46 @@ import datetime
 
 class calenderClass():
     def Calenderoperation(self):
+        driver = None
         try:
-            userinputDate = input("Enter the travel date in DD-MM-YYYY format \n")
-            if calenderClass().DateValidation(userinputDate) != 0:
-                # DateValidation returns 3 variables and is assigned to respective variables
-                EnteredYear, EnteredMonth, EnteredDate = calenderClass().DateValidation(userinputDate)
-                print(EnteredYear)
-                print(EnteredMonth)
-                print(EnteredDate)
+            userInputDate = input("Enter the travel date in DD-MM-YYYY format \n")
 
-            driver = webdriver.Firefox(executable_path=os.getcwd()+"//drivers//geckodriver.exe")
+            if calenderClass().DateValidation(userInputDate) != 0:
+                # DateValidation() returns 3 variables and is assigned to respective variables
+                EnteredYear, EnteredMonth, EnteredDate = calenderClass().DateValidation(userInputDate)
+
+            driver = webdriver.Firefox(executable_path=os.getcwd() + "//drivers//geckodriver.exe")
             driver.get("https://www.expedia.co.in/")
             time.sleep(1)
+
             # destination Field
             InputDestination = driver.find_element(By.NAME, "destination")
             InputDestination.send_keys("Goa, India")
-            keyboard.send_keys("{TAB}")
+            keyboard.send_keys("{TAB}")  # Keyboard action using pywinAuto module.
             time.sleep(2)
-            CheckIn = driver.find_element(By.ID, "hotel-checkin-hp-hotel")
-            CheckIn.click()
-            time.sleep(1)
 
+            # Clicking on check-in date
+            CheckInField = driver.find_element(By.ID, "hotel-checkin-hp-hotel")
+            CheckInField.click()
 
-
+            # Selecting the check-in date
+            CheckInDateXpath = "//*[@data-year='" + str(EnteredYear) + "' and @data-month='" + str(
+                EnteredMonth) + "' and @data-day='" + str(EnteredDate) + "']"
+            CheckInDate = driver.find_element(By.XPATH, CheckInDateXpath)
+            CheckInDate.click()
+            time.sleep(4)
 
         except Exception as e:
             print(str(e))
 
+        finally:
+            if driver is not None:
+                #driver.close()
+                print("hey")
 
-    def DateValidation(self, travelDate):
+    def DateValidation(self, traveldate):
 
-        dateSplit = travelDate.split("-")
+        dateSplit = traveldate.split("-")
         timeFormat = time.localtime()
 
         # Current date Split
@@ -60,8 +69,6 @@ class calenderClass():
             return 0
 
 
-
-
 obj = calenderClass()
 obj.Calenderoperation()
-#obj.DateValidation()
+# obj.DateValidation()
