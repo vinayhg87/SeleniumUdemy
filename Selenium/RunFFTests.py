@@ -74,7 +74,7 @@ class FFtest(object):
             driver.find_element_by_css_selector("input[value^='Alert']").click()
             time.sleep(1)
             Alertprompt = driver.switch_to.alert
-            print("Data fetched from Alert is : "+Alertprompt.text)
+            print("Data fetched from Alert is : "+ Alertprompt.text)
             Alertprompt.accept()
             time.sleep(2)
 
