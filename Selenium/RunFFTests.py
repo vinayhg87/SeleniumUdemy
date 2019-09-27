@@ -1,7 +1,9 @@
+# https://pywinauto.readthedocs.io/en/latest/code/pywinauto.keyboard.html
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver import ActionChains
 from selenium.webdriver.support.ui import Select
+from pywinauto import keyboard
 import os
 import time
 from selenium.webdriver.support import expected_conditions
@@ -27,8 +29,20 @@ class FFtest(object):
             driver.implicitly_wait(10)
             driver.maximize_window()
             driver.get("https://learn.letskodeit.com/p/practice")
-            driver.find_element_by_id("bmwradio").click()
 
+            # this is javascript execution
+            # driver.execute_script("window.location = 'https://www.google.com';")  # to open the web-page.
+            # driver.execute_script("return document.getElementById("ID")")  # finding element using java script
+            # driver.execute_script("window.scrollBy(0,1000);")  # to scroll down using java script
+            # driver.execute_script("window.scrollBy(0,-1000);")  # to scroll down using java script
+
+            # Getting size of window using javascript
+            height = driver.execute_script("return window.innerHeight;")
+            width = driver.execute_script("return window.innerWidth;")
+            print("height is %d" % height)
+            print("width is %d" % width)
+
+            driver.find_element_by_id("bmwradio").click()
             # web-element state
             print(driver.find_element_by_id("bmwradio").is_displayed())
             print(driver.find_element_by_id("bmwradio").is_enabled())
@@ -70,7 +84,7 @@ class FFtest(object):
             time.sleep(1)
             windowHandles = driver.window_handles
             for x in range(len(windowHandles)):
-                if currenttab != windowHandles[x]:
+                if currenttab not in windowHandles[x]:
                     driver.switch_to.window(windowHandles[x])
                     time.sleep(2)
                     driver.find_element_by_id("search-courses").send_keys("Test2")
@@ -84,7 +98,7 @@ class FFtest(object):
             driver.find_element_by_id("openwindow").click()
             size = len(driver.window_handles)
             for win in range(size):
-                if baseWindow != driver.window_handles[win]:
+                if baseWindow not in driver.window_handles[win]:
                     driver.switch_to.window(driver.window_handles[win])
                     time.sleep(2)
                     driver.find_element_by_id("search-courses").send_keys("Test1")
@@ -105,6 +119,26 @@ class FFtest(object):
             print("Data fetched from Alert is : "+AlertPrompt.text)
             AlertPrompt.accept()
             time.sleep(2)
+
+            # keyboard Actions. Pressing page down
+            keyboard.send_keys("{PGDN}")
+            keyboard.send_keys("{PGDN}")
+
+            # I-frame Example
+            iframewindow = driver.find_element(By.ID, "courses-iframe")
+            driver.switch_to.frame(iframewindow)
+            time.sleep(2)
+            driver.find_element(By.ID, "search-courses").send_keys("python")
+            time.sleep(3)
+            driver.switch_to.default_content()
+
+            # keyboard Actions. Pressing page up
+            keyboard.send_keys("{PGUP}")
+
+            # Element Displayed Example
+            driver.find_element(By.ID, "show-textbox").click()
+            time.sleep(3)
+            driver.find_element(By.ID, "displayed-text").send_keys("Hello World")
 
             # taking screenshots
             driver.get_screenshot_as_file(os.getcwd()+"/ScreenShots/test1.png")

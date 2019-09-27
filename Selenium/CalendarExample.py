@@ -7,7 +7,7 @@ import datetime
 
 
 class calenderClass():
-    def Calenderoperation(self):
+    def CalenderOperation(self):
         driver = None
         try:
             userInputDate = input("Enter the travel date in DD-MM-YYYY format \n")
@@ -16,8 +16,13 @@ class calenderClass():
                 # DateValidation() returns 3 variables and is assigned to respective variables
                 EnteredYear, EnteredMonth, EnteredDate = calenderClass().DateValidation(userInputDate)
 
+                # this is because in html code of expedia, the month is always Actual month -1
+                # i.e if month of sept is 9 then in html code it will be written as 8.
+                NewMonth = EnteredMonth - 1
+
             driver = webdriver.Firefox(executable_path=os.getcwd() + "//drivers//geckodriver.exe")
             driver.get("https://www.expedia.co.in/")
+            driver.maximize_window()
             time.sleep(1)
 
             # destination Field
@@ -31,10 +36,12 @@ class calenderClass():
             CheckInField.click()
 
             # Selecting the check-in date
-            CheckInDateXpath = "//*[@data-year='" + str(EnteredYear) + "' and @data-month='" + str(
-                EnteredMonth) + "' and @data-day='" + str(EnteredDate) + "']"
+            CheckInDateXpath = "//div[@class= 'datepicker-cal-month']//*[contains(@data-year, '" + str(
+                EnteredYear) + "') and  contains(@data-month,'" + str(NewMonth) + "') and contains(@data-day, '" + str(
+                EnteredDate) + "')]"
             CheckInDate = driver.find_element(By.XPATH, CheckInDateXpath)
             CheckInDate.click()
+            driver.get_screenshot_as_file(os.getcwd()+"/ScreenShots/CalendarExample.png")
             time.sleep(4)
 
         except Exception as e:
@@ -42,8 +49,8 @@ class calenderClass():
 
         finally:
             if driver is not None:
-                #driver.close()
-                print("hey")
+                driver.close()
+
 
     def DateValidation(self, traveldate):
 
@@ -65,10 +72,10 @@ class calenderClass():
         if UserDate >= currentDate:
             return EnteredYear, EnteredMonth, EnteredDate
         else:
-            raise Exception("Entered date is not valid")
+            raise Exception("Entered date is not valid. Date should be greater than or equal to current date")
             return 0
 
 
 obj = calenderClass()
-obj.Calenderoperation()
+obj.CalenderOperation()
 # obj.DateValidation()
