@@ -8,7 +8,17 @@ import os
 import time
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
+import logging
+import configparser
 
+logging.basicConfig(filename="selenium.log", level="DEBUG")
+logging.warning("Test message")
+
+parser = configparser.RawConfigParser()
+parser.read(os.getcwd()+"/DBDetails.properties")
+hostname = parser.get("BSCSDB", "hostname")
+port = parser.get("BSCSDB", "port")
+logging.info("The host and port of DB is %s and %s" % (hostname, port))
 
 class FFtest(object):
     def testMethod(self):
