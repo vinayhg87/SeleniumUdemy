@@ -1,13 +1,40 @@
-import xlrd
+import os
+import openpyxl
 
-workbook = xlrd.open_workbook("C:\\Users\\VinayVinay\\Desktop\\TestData\\AM GD_July 2019.xlsx")
-sheetCount = workbook.nsheets
-sheetname = workbook.sheet_names()
-print(type(sheetname))
-for sh in range (sheetCount):
-    worksheet = workbook.sheet_by_name(sheetname[sh])
-    nrows = worksheet.nrows
-    ncols = worksheet.ncols
-    print(nrows, ncols)
+class ExcelOperations:
+    workBookLoc = os.getcwd()+"\\ExcelData.xlsx"
+    workbook = openpyxl.load_workbook(workBookLoc)
+
+    def readExcelData(self, sheetname, cell):
+        worksheet = ExcelOperations.workbook[sheetname]
+        cellVal = worksheet[cell].value
+        return cellVal
+
+    def writeExcelData(self, sheetname, cell, data):
+        worksheet = ExcelOperations.workbook[sheetname]
+        worksheet[cell] = data
+        ExcelOperations.workbook.save(ExcelOperations.workBookLoc)
+
+    def maxRowData(self, sheetname):
+        worksheet = ExcelOperations.workbook[sheetname]
+        return worksheet.max_row
+
+    def maxcolnData(self, sheetname):
+        worksheet = ExcelOperations.workbook[sheetname]
+        return worksheet.max_column
 
 
+obj = ExcelOperations()
+# for i in range(1, 11):
+#     cellValue = "B"+str(i)
+#     print(obj.readExcelData("Chapter1_Data", cellValue))
+#
+# for i in range(2,10):
+#     cellValue = "D"+str(i)
+#     print(obj.writeExcelData("Chapter1_Data", cellValue, "FAIL"))
+#
+# obj.writeExcelData("Chapter1_Data", 'D10', "FAIL")
+print(obj.readExcelData("Chapter1_Data", "B3"))
+print(obj.readExcelData("Chapter1_Data", "D4"))
+print(obj.maxRowData("Chapter1_Data"))
+print(obj.maxcolnData("Chapter1_Data"))
