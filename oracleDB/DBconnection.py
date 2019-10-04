@@ -9,6 +9,10 @@ class connectOracle():
     def connectDB(self):
         conn = cx_Oracle.connect("sysadm/sysadm@it002aia:1521/TEMMIG")
         cursor = conn.cursor()
-        cursor.execute("select * from tablename")
+        cursor.execute("select * from TEM_ORDER_TYPE where type_id = '9238'")
         for row in cursor:
-            print(row)
+            print(type(row))
+
+
+obj = connectOracle()
+obj.connectDB()
