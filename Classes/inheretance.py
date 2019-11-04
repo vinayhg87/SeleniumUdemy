@@ -1,3 +1,4 @@
+# in Python, there are only two types of Inheritance. Multiple Inheritance and Multilevel Inheritance.
 
 class SuperClass(object):
     def __init__(self):

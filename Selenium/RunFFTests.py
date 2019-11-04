@@ -3,7 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver import ActionChains
 from selenium.webdriver.support.ui import Select
-from pywinauto import keyboard
+#from pywinauto import keyboard
 import os
 import time
 from selenium.webdriver.support import expected_conditions
@@ -131,8 +131,8 @@ class FFtest(object):
             time.sleep(2)
 
             # keyboard Actions. Pressing page down
-            keyboard.send_keys("{PGDN}")
-            keyboard.send_keys("{PGDN}")
+            #keyboard.send_keys("{PGDN}")
+            #keyboard.send_keys("{PGDN}")
 
             # I-frame Example
             iframewindow = driver.find_element(By.ID, "courses-iframe")
@@ -143,7 +143,7 @@ class FFtest(object):
             driver.switch_to.default_content()
 
             # keyboard Actions. Pressing page up
-            keyboard.send_keys("{PGUP}")
+            #keyboard.send_keys("{PGUP}")
 
             # Element Displayed Example
             driver.find_element(By.ID, "show-textbox").click()
